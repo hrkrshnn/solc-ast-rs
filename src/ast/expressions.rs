@@ -1,3 +1,6 @@
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
+use eyre::eyre;
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Write};
@@ -26,6 +29,12 @@ pub enum Expression {
         src: Option<String>,
         id: Option<NodeID>,
     },
+}
+
+impl Node for Expression {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        todo!()
+    }
 }
 
 impl Expression {
@@ -167,7 +176,7 @@ impl Expression {
         }
     }
 
-    pub fn source_line(&self, source_unit: &SourceUnit) -> std::io::Result<usize> {
+    pub fn source_line(&self, source_unit: &SourceUnit) -> Result<usize> {
         source_unit.source_line(match self {
             Expression::Literal(Literal { src, .. }) => src.as_str(),
             Expression::Identifier(Identifier { src, .. }) => src.as_str(),
@@ -186,7 +195,7 @@ impl Expression {
             Expression::TupleExpression(TupleExpression { src, .. }) => src.as_str(),
             Expression::NewExpression(NewExpression { src, .. }) => src.as_str(),
             Expression::UnhandledExpression { src: Some(src), .. } => src.as_str(),
-            _ => return Err(std::io::Error::from(std::io::ErrorKind::NotFound)),
+            _ => return Err(eyre!("not found")),
         })
     }
 }

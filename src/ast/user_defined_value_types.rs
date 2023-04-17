@@ -1,9 +1,9 @@
 use super::*;
+use crate::visitor::ast_visitor::ASTConstVisitor;
+use crate::visitor::ast_visitor::Node;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use crate::visitor::ast_visitor::Node;
-use crate::visitor::ast_visitor::ASTConstVisitor;
-use eyre::Result;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]

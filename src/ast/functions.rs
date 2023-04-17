@@ -1,8 +1,8 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use eyre::Result;
-use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
 #[serde(rename_all = "camelCase")]
@@ -58,6 +58,15 @@ pub struct OverrideSpecifier {
     pub overrides: Vec<IdentifierPath>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for OverrideSpecifier {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_override_specifier(self)? {
+            todo!()
+        }
+        visitor.end_visit_override_specifier(self)
+    }
 }
 
 impl Display for OverrideSpecifier {

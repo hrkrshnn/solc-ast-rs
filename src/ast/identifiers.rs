@@ -1,8 +1,8 @@
 use super::*;
-use serde::{Deserialize, Serialize};
-use std::fmt::Display;
 use crate::visitor::ast_visitor::*;
 use eyre::Result;
+use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -46,8 +46,9 @@ pub struct IdentifierPath {
 }
 
 impl Node for IdentifierPath {
-    fn accept(&self, _visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        todo!()
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        visitor.visit_identifier_path(self)?;
+        visitor.end_visit_identifier_path(self)
     }
 }
 

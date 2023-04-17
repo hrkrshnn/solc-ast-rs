@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, io};
+use eyre::Result;
+use eyre::eyre;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -29,10 +31,10 @@ pub struct SourceUnit {
 }
 
 impl SourceUnit {
-    pub fn source_line(&self, src: &str) -> io::Result<usize> {
+    pub fn source_line(&self, src: &str) -> Result<usize> {
         let source = match self.source.as_ref() {
             Some(source) => source.as_str(),
-            _ => return Err(io::Error::from(io::ErrorKind::NotFound)),
+            _ => return Err(eyre!("not found")),
         };
 
         let mut values: Vec<Option<usize>> = vec![];
@@ -51,7 +53,7 @@ impl SourceUnit {
 
         Ok(source[..match values.first() {
             Some(&Some(value)) => value,
-            _ => return Err(io::Error::from(io::ErrorKind::NotFound)),
+            _ => return Err(eyre!("not found")),
         }]
             .chars()
             .filter(|&c| c == '\n')
@@ -240,4 +242,3 @@ impl SourceUnit {
         None
     }
 }
-

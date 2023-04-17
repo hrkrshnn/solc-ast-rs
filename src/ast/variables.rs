@@ -1,8 +1,8 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use eyre::Result;
-use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
 #[serde(rename_all = "lowercase")]
@@ -89,7 +89,15 @@ pub struct VariableDeclaration {
 impl Node for VariableDeclaration {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_variable_declaration(self)? {
-            todo!()
+            if self.type_name.is_some() {
+                self.type_name.as_ref().unwrap().accept(visitor)?;
+            }
+            if self.overrides.is_some() {
+                self.overrides.as_ref().unwrap().accept(visitor)?;
+            }
+            if self.value.is_some() {
+                self.value.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_variable_declaration(self)
     }

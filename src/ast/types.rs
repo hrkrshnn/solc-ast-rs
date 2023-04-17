@@ -1,8 +1,8 @@
 use super::*;
-use serde::{Deserialize, Serialize};
-use std::fmt::Display;
 use crate::visitor::ast_visitor::*;
 use eyre::Result;
+use serde::{Deserialize, Serialize};
+use std::fmt::Display;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -25,12 +25,19 @@ pub enum TypeName {
 impl Node for TypeName {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         match self {
-            TypeName::FunctionTypeName(function_type_name) => { function_type_name.accept(visitor) }
-            TypeName::ArrayTypeName(array_type_name) => { array_type_name.accept(visitor) }
-            TypeName::Mapping(mapping) => { mapping.accept(visitor) }
-            TypeName::UserDefinedTypeName(user_defined_type_name) => { user_defined_type_name.accept(visitor) }
-            TypeName::ElementaryTypeName(elementary_type_name) => { elementary_type_name.accept(visitor) }
-            TypeName::String(_) => { todo!() }
+            TypeName::FunctionTypeName(function_type_name) => function_type_name.accept(visitor),
+            TypeName::ArrayTypeName(array_type_name) => array_type_name.accept(visitor),
+            TypeName::Mapping(mapping) => mapping.accept(visitor),
+            TypeName::UserDefinedTypeName(user_defined_type_name) => {
+                user_defined_type_name.accept(visitor)
+            }
+            TypeName::ElementaryTypeName(elementary_type_name) => {
+                elementary_type_name.accept(visitor)
+            }
+            TypeName::String(_) => {
+                // TODO This does not exist.
+                panic!()
+            }
         }
     }
 }
@@ -62,7 +69,6 @@ impl Node for ElementaryTypeName {
         visitor.end_visit_elementary_type_name(self)
     }
 }
-
 
 impl PartialEq for ElementaryTypeName {
     fn eq(&self, other: &Self) -> bool {
@@ -104,7 +110,6 @@ impl Node for UserDefinedTypeName {
         visitor.end_visit_user_defined_type_name(self)
     }
 }
-
 
 impl PartialEq for UserDefinedTypeName {
     fn eq(&self, other: &Self) -> bool {
@@ -151,16 +156,17 @@ pub struct ArrayTypeName {
     pub type_descriptions: TypeDescriptions,
 }
 
-
 impl Node for ArrayTypeName {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_array_type_name(self)? {
-            todo!()
+            self.base_type.accept(visitor)?;
+            if self.length.is_some() {
+                self.length.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_array_type_name(self)
     }
 }
-
 
 impl Display for ArrayTypeName {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -186,12 +192,12 @@ pub struct Mapping {
 impl Node for Mapping {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_mapping(self)? {
-            todo!()
+            self.key_type.accept(visitor)?;
+            self.value_type.accept(visitor)?;
         }
         visitor.end_visit_mapping(self)
     }
 }
-
 
 impl Display for Mapping {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
