@@ -1,6 +1,9 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use crate::visitor::ast_visitor::Node;
+use crate::visitor::ast_visitor::ASTConstVisitor;
+use eyre::Result;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -19,5 +22,15 @@ impl Display for UserDefinedValueTypeDefinition {
             "type {} is {}",
             self.name, self.underlying_type,
         ))
+    }
+}
+
+impl Node for UserDefinedValueTypeDefinition {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_user_defined_value_type_definition(self)? {
+            self.underlying_type.accept(visitor)?;
+        }
+        visitor.end_visit_user_defined_value_type_definition(self)?;
+        Ok(())
     }
 }

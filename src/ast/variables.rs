@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use eyre::Result;
+use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
 #[serde(rename_all = "lowercase")]
@@ -82,6 +84,15 @@ pub struct VariableDeclaration {
     pub visibility: Visibility,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for VariableDeclaration {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_variable_declaration(self)? {
+            todo!()
+        }
+        visitor.end_visit_variable_declaration(self)
+    }
 }
 
 impl Display for VariableDeclaration {

@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use eyre::Result;
+use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
 #[serde(rename_all = "camelCase")]
@@ -23,6 +25,15 @@ pub struct ParameterList {
     pub parameters: Vec<VariableDeclaration>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for ParameterList {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_parameter_list(self)? {
+            list_accept(&self.parameters, visitor)?;
+        }
+        visitor.end_visit_parameter_list(self)
+    }
 }
 
 impl Display for ParameterList {

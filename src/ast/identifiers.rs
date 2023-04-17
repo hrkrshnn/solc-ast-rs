@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -41,6 +43,12 @@ pub struct IdentifierPath {
     pub referenced_declaration: Option<NodeID>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for IdentifierPath {
+    fn accept(&self, _visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        todo!()
+    }
 }
 
 impl PartialEq for IdentifierPath {

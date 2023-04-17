@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -18,6 +20,19 @@ pub enum TypeName {
     UserDefinedTypeName(UserDefinedTypeName),
     ElementaryTypeName(ElementaryTypeName),
     String(String),
+}
+
+impl Node for TypeName {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        match self {
+            TypeName::FunctionTypeName(function_type_name) => { function_type_name.accept(visitor) }
+            TypeName::ArrayTypeName(array_type_name) => { array_type_name.accept(visitor) }
+            TypeName::Mapping(mapping) => { mapping.accept(visitor) }
+            TypeName::UserDefinedTypeName(user_defined_type_name) => { user_defined_type_name.accept(visitor) }
+            TypeName::ElementaryTypeName(elementary_type_name) => { elementary_type_name.accept(visitor) }
+            TypeName::String(_) => { todo!() }
+        }
+    }
 }
 
 impl Display for TypeName {
@@ -40,6 +55,14 @@ pub struct ElementaryTypeName {
     pub name: String,
     pub type_descriptions: TypeDescriptions,
 }
+
+impl Node for ElementaryTypeName {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        visitor.visit_elementary_type_name(self)?;
+        visitor.end_visit_elementary_type_name(self)
+    }
+}
+
 
 impl PartialEq for ElementaryTypeName {
     fn eq(&self, other: &Self) -> bool {
@@ -71,6 +94,18 @@ pub struct UserDefinedTypeName {
     pub type_descriptions: TypeDescriptions,
 }
 
+impl Node for UserDefinedTypeName {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_user_defined_type_name(self)? {
+            if self.path_node.is_some() {
+                self.path_node.as_ref().unwrap().accept(visitor)?;
+            }
+        }
+        visitor.end_visit_user_defined_type_name(self)
+    }
+}
+
+
 impl PartialEq for UserDefinedTypeName {
     fn eq(&self, other: &Self) -> bool {
         self.referenced_declaration
@@ -98,6 +133,16 @@ pub struct FunctionTypeName {
     pub type_descriptions: TypeDescriptions,
 }
 
+impl Node for FunctionTypeName {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_function_type_name(self)? {
+            self.parameter_types.accept(visitor)?;
+            self.return_parameter_types.accept(visitor)?;
+        }
+        visitor.end_visit_function_type_name(self)
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ArrayTypeName {
@@ -105,6 +150,17 @@ pub struct ArrayTypeName {
     pub length: Option<Literal>,
     pub type_descriptions: TypeDescriptions,
 }
+
+
+impl Node for ArrayTypeName {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_array_type_name(self)? {
+            todo!()
+        }
+        visitor.end_visit_array_type_name(self)
+    }
+}
+
 
 impl Display for ArrayTypeName {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -126,6 +182,16 @@ pub struct Mapping {
     pub value_type: Box<TypeName>,
     pub type_descriptions: TypeDescriptions,
 }
+
+impl Node for Mapping {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_mapping(self)? {
+            todo!()
+        }
+        visitor.end_visit_mapping(self)
+    }
+}
+
 
 impl Display for Mapping {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
