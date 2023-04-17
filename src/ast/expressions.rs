@@ -1,7 +1,7 @@
-use crate::visitor::ast_visitor::*;
-use eyre::Result;
-use eyre::eyre;
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::eyre;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Write};
 
@@ -33,7 +33,27 @@ pub enum Expression {
 
 impl Node for Expression {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        todo!()
+        match self {
+            Expression::Literal(literal) => literal.accept(visitor),
+            Expression::Identifier(identifier) => identifier.accept(visitor),
+            Expression::UnaryOperation(unary_operation) => unary_operation.accept(visitor),
+            Expression::BinaryOperation(binary_operation) => binary_operation.accept(visitor),
+            Expression::Conditional(conditional) => conditional.accept(visitor),
+            Expression::Assignment(assignment) => assignment.accept(visitor),
+            Expression::FunctionCall(function_call) => function_call.accept(visitor),
+            Expression::FunctionCallOptions(function_call_options) => {
+                function_call_options.accept(visitor)
+            }
+            Expression::IndexAccess(index_access) => index_access.accept(visitor),
+            Expression::IndexRangeAccess(index_range_access) => index_range_access.accept(visitor),
+            Expression::MemberAccess(member_access) => member_access.accept(visitor),
+            Expression::ElementaryTypeNameExpression(elementary_type_name_expression) => {
+                elementary_type_name_expression.accept(visitor)
+            }
+            Expression::TupleExpression(tuple_expression) => tuple_expression.accept(visitor),
+            Expression::NewExpression(new_expression) => new_expression.accept(visitor),
+            Expression::UnhandledExpression { .. } => panic!(),
+        }
     }
 }
 
@@ -240,6 +260,15 @@ pub struct UnaryOperation {
     pub id: NodeID,
 }
 
+impl Node for UnaryOperation {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_unary_operation(self)? {
+            self.sub_expression.accept(visitor)?
+        }
+        visitor.end_visit_unary_operation(self)
+    }
+}
+
 impl UnaryOperation {
     pub fn contains_operation(&self, operator: &str) -> bool {
         self.operator == operator || self.sub_expression.contains_operation(operator)
@@ -271,6 +300,16 @@ pub struct BinaryOperation {
     pub type_descriptions: TypeDescriptions,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for BinaryOperation {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_binary_operation(self)? {
+            self.left_expression.accept(visitor)?;
+            self.right_expression.accept(visitor)?;
+        }
+        visitor.end_visit_binary_operation(self)
+    }
 }
 
 impl BinaryOperation {
@@ -306,6 +345,17 @@ pub struct Conditional {
     pub id: NodeID,
 }
 
+impl Node for Conditional {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_conditional(self)? {
+            self.condition.accept(visitor)?;
+            self.true_expression.accept(visitor)?;
+            self.false_expression.accept(visitor)?;
+        }
+        visitor.end_visit_conditional(self)
+    }
+}
+
 impl Conditional {
     pub fn contains_operation(&self, operator: &str) -> bool {
         self.condition.contains_operation(operator)
@@ -337,6 +387,16 @@ pub struct Assignment {
     pub type_descriptions: TypeDescriptions,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for Assignment {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_assignment(self)? {
+            self.left_hand_side.accept(visitor)?;
+            self.right_hand_side.accept(visitor)?;
+        }
+        visitor.end_visit_assignment(self)
+    }
 }
 
 impl Assignment {
@@ -378,6 +438,15 @@ pub struct FunctionCall {
     pub type_descriptions: TypeDescriptions,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for FunctionCall {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_function_call(self)? {
+            todo!();
+        }
+        visitor.end_visit_function_call(self)
+    }
 }
 
 impl FunctionCall {
@@ -424,6 +493,15 @@ pub struct FunctionCallOptions {
     pub type_descriptions: TypeDescriptions,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for FunctionCallOptions {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_function_call_options(self)? {
+            todo!();
+        }
+        visitor.end_visit_function_call_options(self)
+    }
 }
 
 impl FunctionCallOptions {
@@ -499,6 +577,15 @@ pub struct IndexAccess {
     pub id: NodeID,
 }
 
+impl Node for IndexAccess {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_index_access(self)? {
+            todo!();
+        }
+        visitor.end_visit_index_access(self)
+    }
+}
+
 impl IndexAccess {
     pub fn contains_operation(&self, operator: &str) -> bool {
         self.index_expression.contains_operation(operator)
@@ -527,6 +614,15 @@ pub struct IndexRangeAccess {
     pub type_descriptions: TypeDescriptions,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for IndexRangeAccess {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_index_range_access(self)? {
+            todo!();
+        }
+        visitor.end_visit_index_range_access(self)
+    }
 }
 
 impl IndexRangeAccess {
@@ -577,6 +673,15 @@ pub struct MemberAccess {
     pub id: NodeID,
 }
 
+impl Node for MemberAccess {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_member_access(self)? {
+            todo!();
+        }
+        visitor.end_visit_member_access(self)
+    }
+}
+
 impl MemberAccess {
     pub fn contains_operation(&self, operator: &str) -> bool {
         self.expression.contains_operation(operator)
@@ -603,6 +708,15 @@ pub struct ElementaryTypeNameExpression {
     pub id: NodeID,
 }
 
+impl Node for ElementaryTypeNameExpression {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_elementary_type_name_expression(self)? {
+            todo!();
+        }
+        visitor.end_visit_elementary_type_name_expression(self)
+    }
+}
+
 impl Display for ElementaryTypeNameExpression {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("{}", self.type_name))
@@ -622,6 +736,15 @@ pub struct TupleExpression {
     pub type_descriptions: TypeDescriptions,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for TupleExpression {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_tuple_expression(self)? {
+            todo!();
+        }
+        visitor.end_visit_tuple_expression(self)
+    }
 }
 
 impl TupleExpression {
@@ -670,6 +793,15 @@ pub struct NewExpression {
     pub l_value_requested: bool,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for NewExpression {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_new_expression(self)? {
+            todo!();
+        }
+        visitor.end_visit_new_expression(self)
+    }
 }
 
 impl Display for NewExpression {

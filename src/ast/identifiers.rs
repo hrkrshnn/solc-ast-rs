@@ -16,6 +16,15 @@ pub struct Identifier {
     pub id: NodeID,
 }
 
+impl Node for Identifier {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_identifier(self)? {
+            todo!();
+        }
+        visitor.end_visit_identifier(self)
+    }
+}
+
 impl PartialEq for Identifier {
     fn eq(&self, other: &Self) -> bool {
         self.argument_types.eq(&other.argument_types)

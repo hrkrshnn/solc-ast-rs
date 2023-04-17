@@ -10,10 +10,58 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_assignment(&mut self, node: &Assignment) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_assignment(&mut self, node: &Assignment) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_binary_operation(&mut self, node: &BinaryOperation) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_binary_operation(&mut self, node: &BinaryOperation) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_conditional(&mut self, node: &Conditional) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_conditional(&mut self, node: &Conditional) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_elementary_type_name(&mut self, node: &ElementaryTypeName) -> Result<bool> {
         self.visit_node(node)
     }
     fn end_visit_elementary_type_name(&mut self, node: &ElementaryTypeName) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_elementary_type_name_expression(
+        &mut self,
+        node: &ElementaryTypeNameExpression,
+    ) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_elementary_type_name_expression(
+        &mut self,
+        node: &ElementaryTypeNameExpression,
+    ) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_function_call(&mut self, node: &FunctionCall) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_function_call(&mut self, node: &FunctionCall) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_function_call_options(&mut self, node: &FunctionCallOptions) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_function_call_options(&mut self, node: &FunctionCallOptions) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -24,6 +72,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_identifier(&mut self, node: &Identifier) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_identifier(&mut self, node: &Identifier) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_identifier_path(&mut self, node: &IdentifierPath) -> Result<bool> {
         self.visit_node(node)
     }
@@ -31,10 +86,38 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_index_access(&mut self, node: &IndexAccess) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_index_access(&mut self, node: &IndexAccess) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_index_range_access(&mut self, node: &IndexRangeAccess) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_index_range_access(&mut self, node: &IndexRangeAccess) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_literal(&mut self, node: &Literal) -> Result<bool> {
         self.visit_node(node)
     }
     fn end_visit_literal(&mut self, node: &Literal) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_member_access(&mut self, node: &MemberAccess) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_member_access(&mut self, node: &MemberAccess) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_new_expression(&mut self, node: &NewExpression) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_new_expression(&mut self, node: &NewExpression) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -52,11 +135,24 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
-
     fn visit_parameter_list(&mut self, node: &ParameterList) -> Result<bool> {
         self.visit_node(node)
     }
     fn end_visit_parameter_list(&mut self, node: &ParameterList) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_tuple_expression(&mut self, node: &TupleExpression) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_tuple_expression(&mut self, node: &TupleExpression) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_unary_operation(&mut self, node: &UnaryOperation) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_unary_operation(&mut self, node: &UnaryOperation) -> Result<()> {
         self.end_visit_node(node)
     }
 

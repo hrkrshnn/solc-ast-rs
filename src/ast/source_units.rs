@@ -1,8 +1,8 @@
 use super::*;
+use eyre::eyre;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, io};
-use eyre::Result;
-use eyre::eyre;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(untagged)]
