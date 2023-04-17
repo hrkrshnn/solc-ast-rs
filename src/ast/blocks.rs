@@ -21,12 +21,3 @@ impl Display for Block {
         f.write_str("}")
     }
 }
-
-pub struct BlockContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub block: &'a Block,
-}

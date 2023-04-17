@@ -43,31 +43,6 @@ impl Display for ModifierDefinition {
     }
 }
 
-pub struct ModifierDefinitionContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub modifier_definition: &'a ModifierDefinition,
-}
-
-impl<'a> ModifierDefinitionContext<'a> {
-    pub fn create_block_context<'b>(
-        &self,
-        block: &'a Block,
-        blocks: &'b mut Vec<&'a Block>,
-    ) -> BlockContext<'a, 'b> {
-        BlockContext {
-            source_units: self.source_units,
-            current_source_unit: self.current_source_unit,
-            contract_definition: self.contract_definition,
-            definition_node: self.definition_node,
-            blocks,
-            block,
-        }
-    }
-}
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
 #[serde(rename_all = "camelCase")]
 pub enum ModifierInvocationKind {
@@ -105,12 +80,4 @@ impl Display for ModifierInvocation {
 
         Ok(())
     }
-}
-
-pub struct ModifierInvocationContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub modifier_invocation: &'a ModifierInvocation,
 }

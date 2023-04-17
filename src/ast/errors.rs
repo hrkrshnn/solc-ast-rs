@@ -18,10 +18,3 @@ impl Display for ErrorDefinition {
         f.write_fmt(format_args!("error {}{}", self.name, self.parameters))
     }
 }
-
-pub struct ErrorDefinitionContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: Option<&'a ContractDefinition>,
-    pub error_definition: &'a ErrorDefinition,
-}

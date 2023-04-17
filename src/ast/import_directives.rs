@@ -22,9 +22,3 @@ pub struct ImportDirective {
     pub src: String,
     pub id: NodeID,
 }
-
-pub struct ImportDirectiveContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub import_directive: &'a ImportDirective,
-}

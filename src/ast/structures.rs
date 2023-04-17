@@ -26,10 +26,3 @@ impl Display for StructDefinition {
         f.write_str("}")
     }
 }
-
-pub struct StructDefinitionContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: Option<&'a ContractDefinition>,
-    pub struct_definition: &'a StructDefinition,
-}

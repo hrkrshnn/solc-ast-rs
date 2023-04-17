@@ -34,16 +34,6 @@ impl Display for Identifier {
     }
 }
 
-pub struct IdentifierContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub identifier: &'a Identifier,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct IdentifierPath {

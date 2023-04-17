@@ -39,10 +39,3 @@ impl Display for EnumDefinition {
         f.write_str("}")
     }
 }
-
-pub struct EnumDefinitionContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: Option<&'a ContractDefinition>,
-    pub enum_definition: &'a EnumDefinition,
-}

@@ -21,10 +21,3 @@ impl Display for UserDefinedValueTypeDefinition {
         ))
     }
 }
-
-pub struct UserDefinedValueTypeDefinitionContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: Option<&'a ContractDefinition>,
-    pub user_defined_value_type_definition: &'a UserDefinedValueTypeDefinition,
-}

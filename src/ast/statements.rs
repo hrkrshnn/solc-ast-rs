@@ -57,15 +57,6 @@ impl Display for Statement {
     }
 }
 
-pub struct StatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: &'a Statement,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ExpressionStatement {
@@ -120,15 +111,6 @@ impl Display for VariableDeclarationStatement {
     }
 }
 
-pub struct VariableDeclarationStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub variable_declaration_statement: &'a VariableDeclarationStatement,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(untagged)]
 pub enum BlockOrStatement {
@@ -178,15 +160,6 @@ impl Display for BlockOrStatement {
     }
 }
 
-pub struct BlockOrStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub block_or_statement: &'a BlockOrStatement,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct IfStatement {
@@ -207,15 +180,6 @@ impl Display for IfStatement {
 
         Ok(())
     }
-}
-
-pub struct IfStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub if_statement: &'a IfStatement,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -253,15 +217,6 @@ impl Display for ForStatement {
     }
 }
 
-pub struct ForStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub for_statement: &'a ForStatement,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct WhileStatement {
@@ -277,15 +232,6 @@ impl Display for WhileStatement {
     }
 }
 
-pub struct WhileStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub while_statement: &'a WhileStatement,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct EmitStatement {
@@ -296,15 +242,6 @@ impl Display for EmitStatement {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("emit {}", self.event_call))
     }
-}
-
-pub struct EmitStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub emit_statement: &'a EmitStatement,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -320,15 +257,6 @@ impl Display for TryStatement {
     }
 }
 
-pub struct TryStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub try_statement: &'a TryStatement,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct RevertStatement {
@@ -339,15 +267,6 @@ impl Display for RevertStatement {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("revert {}", self.error_call))
     }
-}
-
-pub struct RevertStatementContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub revert_statement: &'a RevertStatement,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -385,16 +304,6 @@ impl Display for Return {
     }
 }
 
-pub struct ReturnContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub return_statement: &'a Return,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineAssembly {
@@ -407,14 +316,4 @@ pub struct InlineAssembly {
     pub operations: Option<String>,
     pub src: String,
     pub id: NodeID,
-}
-
-pub struct InlineAssemblyContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: &'a Statement,
-    pub inline_assembly: &'a InlineAssembly,
 }

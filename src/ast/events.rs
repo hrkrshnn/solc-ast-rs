@@ -19,10 +19,3 @@ impl Display for EventDefinition {
         f.write_fmt(format_args!("event {}{}", self.name, self.parameters))
     }
 }
-
-pub struct EventDefinitionContext<'a> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub event_definition: &'a EventDefinition,
-}

@@ -215,16 +215,6 @@ impl Display for Expression {
     }
 }
 
-pub struct ExpressionContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub expression: &'a Expression,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct UnaryOperation {
@@ -255,16 +245,6 @@ impl Display for UnaryOperation {
             self.operator.as_str()
         ))
     }
-}
-
-pub struct UnaryOperationContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub unary_operation: &'a UnaryOperation,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -301,16 +281,6 @@ impl Display for BinaryOperation {
     }
 }
 
-pub struct BinaryOperationContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub binary_operation: &'a BinaryOperation,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Conditional {
@@ -344,16 +314,6 @@ impl Display for Conditional {
     }
 }
 
-pub struct ConditionalContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub conditional: &'a Conditional,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Assignment {
@@ -383,16 +343,6 @@ impl Display for Assignment {
             self.left_hand_side, self.operator, self.right_hand_side
         ))
     }
-}
-
-pub struct AssignmentContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub assignment: &'a Assignment,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
@@ -448,16 +398,6 @@ impl Display for FunctionCall {
 
         f.write_str(")")
     }
-}
-
-pub struct FunctionCallContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub function_call: &'a FunctionCall,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -535,16 +475,6 @@ impl Display for FunctionCallOptions {
     }
 }
 
-pub struct FunctionCallOptionsContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub function_call_options: &'a FunctionCallOptions,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct IndexAccess {
@@ -573,16 +503,6 @@ impl Display for IndexAccess {
             self.base_expression, self.index_expression
         ))
     }
-}
-
-pub struct IndexAccessContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub index_access: &'a IndexAccess,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -632,16 +552,6 @@ impl Display for IndexRangeAccess {
     }
 }
 
-pub struct IndexRangeAccessContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub index_range_access: &'a IndexRangeAccess,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct MemberAccess {
@@ -670,16 +580,6 @@ impl Display for MemberAccess {
     }
 }
 
-pub struct MemberAccessContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub member_access: &'a MemberAccess,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ElementaryTypeNameExpression {
@@ -698,16 +598,6 @@ impl Display for ElementaryTypeNameExpression {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("{}", self.type_name))
     }
-}
-
-pub struct ElementaryTypeNameExpressionContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub elementary_type_name_expression: &'a ElementaryTypeNameExpression,
 }
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
@@ -759,16 +649,6 @@ impl Display for TupleExpression {
     }
 }
 
-pub struct TupleExpressionContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub tuple_expression: &'a TupleExpression,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct NewExpression {
@@ -787,14 +667,4 @@ impl Display for NewExpression {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("new {}", self.type_name))
     }
-}
-
-pub struct NewExpressionContext<'a, 'b> {
-    pub source_units: &'a [SourceUnit],
-    pub current_source_unit: &'a SourceUnit,
-    pub contract_definition: &'a ContractDefinition,
-    pub definition_node: &'a ContractDefinitionNode,
-    pub blocks: &'b mut Vec<&'a Block>,
-    pub statement: Option<&'a Statement>,
-    pub new_expression: &'a NewExpression,
 }
