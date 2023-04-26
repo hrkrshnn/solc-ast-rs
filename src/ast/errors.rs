@@ -17,11 +17,9 @@ pub struct ErrorDefinition {
 
 impl Node for ErrorDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_error_definition(self)? {
-            if self.documentation.is_some() {
-                self.documentation.as_ref().unwrap().accept(visitor)?;
-                self.parameters.accept(visitor)?;
-            }
+        if visitor.visit_error_definition(self)? && self.documentation.is_some() {
+            self.documentation.as_ref().unwrap().accept(visitor)?;
+            self.parameters.accept(visitor)?;
         }
         visitor.end_visit_error_definition(self)
     }

@@ -282,6 +282,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_try_catch_clause(&mut self, node: &TryCatchClause) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_try_catch_clause(&mut self, node: &TryCatchClause) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_tuple_expression(&mut self, node: &TupleExpression) -> Result<bool> {
         self.visit_node(node)
     }

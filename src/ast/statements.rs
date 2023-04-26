@@ -93,7 +93,7 @@ pub struct ExpressionStatement {
 impl Node for ExpressionStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_expression_statement(self)? {
-            todo!()
+            self.expression.accept(visitor)?;
         }
         visitor.end_visit_expression_statement(self)
     }
@@ -118,7 +118,14 @@ pub struct VariableDeclarationStatement {
 impl Node for VariableDeclarationStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_variable_declaration_statement(self)? {
-            todo!()
+            for declaration in &self.declarations {
+                if declaration.is_some() {
+                    declaration.as_ref().unwrap().accept(visitor)?;
+                }
+            }
+            if self.initial_value.is_some() {
+                self.initial_value.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_variable_declaration_statement(self)
     }
@@ -161,6 +168,15 @@ impl Display for VariableDeclarationStatement {
 pub enum BlockOrStatement {
     Block(Box<Block>),
     Statement(Box<Statement>),
+}
+
+impl Node for BlockOrStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        match self {
+            BlockOrStatement::Block(block) => block.accept(visitor),
+            BlockOrStatement::Statement(statement) => statement.accept(visitor),
+        }
+    }
 }
 
 impl BlockOrStatement {
@@ -218,7 +234,11 @@ pub struct IfStatement {
 impl Node for IfStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_if_statement(self)? {
-            todo!()
+            self.condition.accept(visitor)?;
+            self.true_body.accept(visitor)?;
+            if self.false_body.is_some() {
+                self.false_body.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_if_statement(self)
     }
@@ -250,7 +270,19 @@ pub struct ForStatement {
 impl Node for ForStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_for_statement(self)? {
-            todo!()
+            if self.initialization_expression.is_some() {
+                self.initialization_expression
+                    .as_ref()
+                    .unwrap()
+                    .accept(visitor)?;
+            }
+            if self.condition.is_some() {
+                self.condition.as_ref().unwrap().accept(visitor)?;
+            }
+            if self.loop_expression.is_some() {
+                self.loop_expression.as_ref().unwrap().accept(visitor)?;
+            }
+            self.body.accept(visitor)?;
         }
         visitor.end_visit_for_statement(self)
     }
@@ -292,7 +324,8 @@ pub struct WhileStatement {
 impl Node for WhileStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_while_statement(self)? {
-            todo!()
+            self.condition.accept(visitor)?;
+            self.body.accept(visitor)?;
         }
         visitor.end_visit_while_statement(self)
     }
@@ -313,7 +346,7 @@ pub struct EmitStatement {
 impl Node for EmitStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_emit_statement(self)? {
-            todo!()
+            self.event_call.accept(visitor)?;
         }
         visitor.end_visit_emit_statement(self)
     }
@@ -335,7 +368,8 @@ pub struct TryStatement {
 impl Node for TryStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_try_statement(self)? {
-            todo!()
+            self.external_call.accept(visitor)?;
+            list_accept(&self.clauses, visitor)?;
         }
         visitor.end_visit_try_statement(self)
     }
@@ -356,7 +390,7 @@ pub struct RevertStatement {
 impl Node for RevertStatement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_revert_statement(self)? {
-            todo!()
+            self.error_call.accept(visitor)?;
         }
         visitor.end_visit_revert_statement(self)
     }
@@ -376,6 +410,18 @@ pub struct TryCatchClause {
     pub parameters: Option<ParameterList>,
 }
 
+impl Node for TryCatchClause {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_try_catch_clause(self)? {
+            if self.parameters.is_some() {
+                self.parameters.as_ref().unwrap().accept(visitor)?;
+            }
+            self.block.accept(visitor)?;
+        }
+        visitor.end_visit_try_catch_clause(self)
+    }
+}
+
 impl Display for TryCatchClause {
     fn fmt(&self, _: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         unimplemented!()
@@ -393,8 +439,8 @@ pub struct Return {
 
 impl Node for Return {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_return(self)? {
-            todo!()
+        if visitor.visit_return(self)? && self.expression.is_some() {
+            self.expression.as_ref().unwrap().accept(visitor)?;
         }
         visitor.end_visit_return(self)
     }
@@ -428,9 +474,7 @@ pub struct InlineAssembly {
 
 impl Node for InlineAssembly {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_inline_assembly(self)? {
-            todo!()
-        }
+        visitor.visit_inline_assembly(self)?;
         visitor.end_visit_inline_assembly(self)
     }
 }
