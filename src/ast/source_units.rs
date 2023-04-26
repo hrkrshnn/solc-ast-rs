@@ -1,4 +1,5 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
 use eyre::eyre;
 use eyre::Result;
 use serde::{Deserialize, Serialize};
@@ -15,6 +16,29 @@ pub enum SourceUnitNode {
     ErrorDefinition(ErrorDefinition),
     VariableDeclaration(VariableDeclaration),
     UserDefinedValueTypeDefinition(UserDefinedValueTypeDefinition),
+}
+
+impl Node for SourceUnitNode {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        match self {
+            SourceUnitNode::PragmaDirective(pragma_directive) => pragma_directive.accept(visitor),
+            SourceUnitNode::ImportDirective(import_directive) => import_directive.accept(visitor),
+            SourceUnitNode::ContractDefinition(contract_definition) => {
+                contract_definition.accept(visitor)
+            }
+            SourceUnitNode::StructDefinition(struct_definition) => {
+                struct_definition.accept(visitor)
+            }
+            SourceUnitNode::EnumDefinition(enum_definition) => enum_definition.accept(visitor),
+            SourceUnitNode::ErrorDefinition(error_definition) => error_definition.accept(visitor),
+            SourceUnitNode::VariableDeclaration(variable_declaration) => {
+                variable_declaration.accept(visitor)
+            }
+            SourceUnitNode::UserDefinedValueTypeDefinition(user_defined_value_type_definition) => {
+                user_defined_value_type_definition.accept(visitor)
+            }
+        }
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

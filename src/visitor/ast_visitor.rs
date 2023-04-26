@@ -163,6 +163,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_import_directive(&mut self, node: &ImportDirective) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_import_directive(&mut self, node: &ImportDirective) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_index_access(&mut self, node: &IndexAccess) -> Result<bool> {
         self.visit_node(node)
     }
@@ -244,6 +251,13 @@ pub trait ASTConstVisitor {
         self.visit_node(node)
     }
     fn end_visit_parameter_list(&mut self, node: &ParameterList) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_pragma_directive(&mut self, node: &PragmaDirective) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_pragma_directive(&mut self, node: &PragmaDirective) -> Result<()> {
         self.end_visit_node(node)
     }
 
