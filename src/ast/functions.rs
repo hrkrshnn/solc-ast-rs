@@ -15,7 +15,7 @@ pub enum FunctionKind {
 
 impl Display for FunctionKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", format!("{:?}", self).to_lowercase()))
+        f.write_fmt(format_args!("{}", format!("{self:?}").to_lowercase()))
     }
 }
 
@@ -45,7 +45,7 @@ impl Display for ParameterList {
                 f.write_str(", ")?;
             }
 
-            f.write_fmt(format_args!("{}", parameter))?;
+            f.write_fmt(format_args!("{parameter}"))?;
         }
 
         f.write_str(")")
@@ -81,7 +81,7 @@ impl Display for OverrideSpecifier {
                     f.write_str(", ")?;
                 }
 
-                f.write_fmt(format_args!("{}", identifier_path))?;
+                f.write_fmt(format_args!("{identifier_path}"))?;
             }
 
             f.write_str(")")?;
@@ -203,11 +203,11 @@ impl Display for FunctionDefinition {
         }
 
         if let Some(overrides) = self.overrides.as_ref() {
-            f.write_fmt(format_args!(" {}", overrides))?;
+            f.write_fmt(format_args!(" {overrides}"))?;
         }
 
         for modifier in self.modifiers.iter() {
-            f.write_fmt(format_args!(" {}", modifier))?;
+            f.write_fmt(format_args!(" {modifier}"))?;
         }
 
         if !self.return_parameters.parameters.is_empty() {
@@ -215,7 +215,7 @@ impl Display for FunctionDefinition {
         }
 
         match self.body.as_ref() {
-            Some(body) => f.write_fmt(format_args!(" {}", body)),
+            Some(body) => f.write_fmt(format_args!(" {body}")),
             None => f.write_str(";"),
         }
     }

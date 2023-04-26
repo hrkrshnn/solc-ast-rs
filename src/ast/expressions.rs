@@ -472,7 +472,7 @@ impl Display for FunctionCall {
                 f.write_str(", ")?;
             }
 
-            f.write_fmt(format_args!("{}", argument))?;
+            f.write_fmt(format_args!("{argument}"))?;
         }
 
         f.write_str(")")
@@ -556,7 +556,7 @@ impl Display for FunctionCallOptions {
                     f.write_str(", ")?;
                 }
 
-                f.write_fmt(format_args!("{}", argument))?;
+                f.write_fmt(format_args!("{argument}"))?;
             }
 
             f.write_char(')')?;
@@ -655,13 +655,13 @@ impl Display for IndexRangeAccess {
         f.write_fmt(format_args!("{}[", self.base_expression))?;
 
         if let Some(start_expression) = self.start_expression.as_ref() {
-            f.write_fmt(format_args!("{}", start_expression))?;
+            f.write_fmt(format_args!("{start_expression}"))?;
         }
 
         f.write_str(":")?;
 
         if let Some(end_expression) = self.end_expression.as_ref() {
-            f.write_fmt(format_args!("{}", end_expression))?;
+            f.write_fmt(format_args!("{end_expression}"))?;
         }
 
         f.write_str("]")
@@ -786,7 +786,7 @@ impl Display for TupleExpression {
             }
 
             if let Some(component) = component {
-                f.write_fmt(format_args!("{}", component))?;
+                f.write_fmt(format_args!("{component}"))?;
             }
         }
 

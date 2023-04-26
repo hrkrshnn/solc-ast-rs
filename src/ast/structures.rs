@@ -31,7 +31,7 @@ impl Display for StructDefinition {
         f.write_fmt(format_args!("struct {} {{\n", self.name))?;
 
         for member in self.members.iter() {
-            f.write_fmt(format_args!("\t{};\n", member))?;
+            f.write_fmt(format_args!("\t{member};\n"))?;
         }
 
         f.write_str("}")

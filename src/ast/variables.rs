@@ -14,7 +14,7 @@ pub enum Mutability {
 
 impl Display for Mutability {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", format!("{:?}", self).to_lowercase()))
+        f.write_fmt(format_args!("{}", format!("{self:?}").to_lowercase()))
     }
 }
 
@@ -29,7 +29,7 @@ pub enum StateMutability {
 
 impl Display for StateMutability {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", format!("{:?}", self).to_lowercase()))
+        f.write_fmt(format_args!("{}", format!("{self:?}").to_lowercase()))
     }
 }
 
@@ -44,7 +44,7 @@ pub enum Visibility {
 
 impl Display for Visibility {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", format!("{:?}", self).to_lowercase()))
+        f.write_fmt(format_args!("{}", format!("{self:?}").to_lowercase()))
     }
 }
 
@@ -59,7 +59,7 @@ pub enum StorageLocation {
 
 impl Display for StorageLocation {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_fmt(format_args!("{}", format!("{:?}", self).to_lowercase()))
+        f.write_fmt(format_args!("{}", format!("{self:?}").to_lowercase()))
     }
 }
 
@@ -113,7 +113,7 @@ impl Display for VariableDeclaration {
 
         if let Some(mutability) = self.mutability.as_ref() {
             if mutability != &Mutability::Mutable {
-                f.write_fmt(format_args!(" {}", mutability))?;
+                f.write_fmt(format_args!(" {mutability}"))?;
             }
         }
 
@@ -130,7 +130,7 @@ impl Display for VariableDeclaration {
         }
 
         if let Some(value) = self.value.as_ref() {
-            f.write_fmt(format_args!(" = {}", value))?;
+            f.write_fmt(format_args!(" = {value}"))?;
         }
 
         Ok(())

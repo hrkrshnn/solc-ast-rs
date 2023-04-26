@@ -26,7 +26,7 @@ impl Display for Block {
         f.write_str("{\n")?;
 
         for statement in self.statements.iter() {
-            f.write_fmt(format_args!("\t{};\n", statement))?;
+            f.write_fmt(format_args!("\t{statement};\n"))?;
         }
 
         f.write_str("}")

@@ -32,7 +32,7 @@ impl Display for UsingForDirective {
             "using {} for {}",
             self.library_name,
             match self.type_name.as_ref() {
-                Some(type_name) => format!("{}", type_name),
+                Some(type_name) => format!("{type_name}"),
                 None => "_".to_string(),
             }
         ))

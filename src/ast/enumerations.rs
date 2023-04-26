@@ -51,7 +51,7 @@ impl Display for EnumDefinition {
         f.write_fmt(format_args!("enum {} {{\n", self.name))?;
 
         for member in self.members.iter() {
-            f.write_fmt(format_args!("\t{},", member))?;
+            f.write_fmt(format_args!("\t{member},"))?;
         }
 
         f.write_str("}")

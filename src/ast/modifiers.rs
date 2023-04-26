@@ -49,7 +49,7 @@ impl Display for ModifierDefinition {
         }
 
         if let Some(overrides) = self.overrides.as_ref() {
-            f.write_fmt(format_args!(" {}", overrides))?;
+            f.write_fmt(format_args!(" {overrides}"))?;
         }
 
         f.write_fmt(format_args!(" {}", self.body))
@@ -97,7 +97,7 @@ impl Display for ModifierInvocation {
                     f.write_str(", ")?;
                 }
 
-                f.write_fmt(format_args!("{}", argument))?;
+                f.write_fmt(format_args!("{argument}"))?;
             }
 
             f.write_str(")")?;
