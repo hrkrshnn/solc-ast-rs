@@ -1,8 +1,8 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use eyre::Result;
-use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]

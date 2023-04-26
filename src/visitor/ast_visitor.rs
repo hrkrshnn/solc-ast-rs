@@ -65,6 +65,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_emit_statement(&mut self, node: &EmitStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_emit_statement(&mut self, node: &EmitStatement) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_enum_definition(&mut self, node: &EnumDefinition) -> Result<bool> {
         self.visit_node(node)
     }
@@ -90,6 +97,13 @@ pub trait ASTConstVisitor {
         self.visit_node(node)
     }
     fn end_visit_error_definition(&mut self, node: &ErrorDefinition) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_expression_statement(&mut self, node: &ExpressionStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_expression_statement(&mut self, node: &ExpressionStatement) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -121,6 +135,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_for_statement(&mut self, node: &ForStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_for_statement(&mut self, node: &ForStatement) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_identifier(&mut self, node: &Identifier) -> Result<bool> {
         self.visit_node(node)
     }
@@ -135,10 +156,24 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_if_statement(&mut self, node: &IfStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_if_statement(&mut self, node: &IfStatement) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_index_access(&mut self, node: &IndexAccess) -> Result<bool> {
         self.visit_node(node)
     }
     fn end_visit_index_access(&mut self, node: &IndexAccess) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_index_range_access(&mut self, node: &IndexRangeAccess) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_index_range_access(&mut self, node: &IndexRangeAccess) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -149,10 +184,10 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
-    fn visit_index_range_access(&mut self, node: &IndexRangeAccess) -> Result<bool> {
+    fn visit_inline_assembly(&mut self, node: &InlineAssembly) -> Result<bool> {
         self.visit_node(node)
     }
-    fn end_visit_index_range_access(&mut self, node: &IndexRangeAccess) -> Result<()> {
+    fn end_visit_inline_assembly(&mut self, node: &InlineAssembly) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -198,7 +233,6 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
-
     fn visit_override_specifier(&mut self, node: &OverrideSpecifier) -> Result<bool> {
         self.visit_node(node)
     }
@@ -213,6 +247,20 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_return(&mut self, node: &Return) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_return(&mut self, node: &Return) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_revert_statement(&mut self, node: &RevertStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_revert_statement(&mut self, node: &RevertStatement) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_struct_definition(&mut self, node: &StructDefinition) -> Result<bool> {
         self.visit_node(node)
     }
@@ -224,6 +272,13 @@ pub trait ASTConstVisitor {
         self.visit_node(node)
     }
     fn end_visit_structured_documentation(&mut self, node: &StructuredDocumentation) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_try_statement(&mut self, node: &TryStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_try_statement(&mut self, node: &TryStatement) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -272,6 +327,26 @@ pub trait ASTConstVisitor {
         self.visit_node(node)
     }
     fn end_visit_variable_declaration(&mut self, node: &VariableDeclaration) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_variable_declaration_statement(
+        &mut self,
+        node: &VariableDeclarationStatement,
+    ) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_variable_declaration_statement(
+        &mut self,
+        node: &VariableDeclarationStatement,
+    ) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_while_statement(&mut self, node: &WhileStatement) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_while_statement(&mut self, node: &WhileStatement) -> Result<()> {
         self.end_visit_node(node)
     }
 

@@ -108,7 +108,6 @@ impl Node for InheritanceSpecifier {
             if self.arguments.is_some() {
                 list_accept(self.arguments.as_ref().unwrap(), visitor)?;
             }
-
         }
         visitor.end_visit_inheritance_specifier(self)
     }

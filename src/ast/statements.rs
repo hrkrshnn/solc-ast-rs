@@ -1,8 +1,8 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
-use eyre::Result;
-use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -29,7 +29,26 @@ pub enum Statement {
 
 impl Node for Statement {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        todo!()
+        match self {
+            Statement::VariableDeclarationStatement(variable_declaration_statement) => {
+                variable_declaration_statement.accept(visitor)
+            }
+            Statement::IfStatement(if_statement) => if_statement.accept(visitor),
+            Statement::ForStatement(for_statement) => for_statement.accept(visitor),
+            Statement::WhileStatement(while_statement) => while_statement.accept(visitor),
+            Statement::EmitStatement(emit_statement) => emit_statement.accept(visitor),
+            Statement::TryStatement(try_statement) => try_statement.accept(visitor),
+            Statement::UncheckedBlock(unchecked_statement) => unchecked_statement.accept(visitor),
+            Statement::Return(return_statement) => return_statement.accept(visitor),
+            Statement::RevertStatement(revert_statement) => revert_statement.accept(visitor),
+            Statement::ExpressionStatement(expression_statement) => {
+                expression_statement.accept(visitor)
+            }
+            Statement::InlineAssembly(inline_assembly) => inline_assembly.accept(visitor),
+            Statement::UnhandledStatement { .. } => {
+                panic!()
+            }
+        }
     }
 }
 
@@ -71,6 +90,15 @@ pub struct ExpressionStatement {
     pub expression: Expression,
 }
 
+impl Node for ExpressionStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_expression_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_expression_statement(self)
+    }
+}
+
 impl Display for ExpressionStatement {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("{}", self.expression))
@@ -85,6 +113,15 @@ pub struct VariableDeclarationStatement {
     pub initial_value: Option<Expression>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for VariableDeclarationStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_variable_declaration_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_variable_declaration_statement(self)
+    }
 }
 
 impl Display for VariableDeclarationStatement {
@@ -178,6 +215,15 @@ pub struct IfStatement {
     pub id: NodeID,
 }
 
+impl Node for IfStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_if_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_if_statement(self)
+    }
+}
+
 impl Display for IfStatement {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("if ({}) {}", self.condition, self.true_body))?;
@@ -199,6 +245,15 @@ pub struct ForStatement {
     pub body: BlockOrStatement,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for ForStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_for_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_for_statement(self)
+    }
 }
 
 impl Display for ForStatement {
@@ -234,6 +289,15 @@ pub struct WhileStatement {
     pub id: NodeID,
 }
 
+impl Node for WhileStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_while_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_while_statement(self)
+    }
+}
+
 impl Display for WhileStatement {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_fmt(format_args!("while ({}) {}", self.condition, self.body))
@@ -244,6 +308,15 @@ impl Display for WhileStatement {
 #[serde(rename_all = "camelCase")]
 pub struct EmitStatement {
     pub event_call: Expression,
+}
+
+impl Node for EmitStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_emit_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_emit_statement(self)
+    }
 }
 
 impl Display for EmitStatement {
@@ -259,6 +332,15 @@ pub struct TryStatement {
     pub external_call: FunctionCall,
 }
 
+impl Node for TryStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_try_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_try_statement(self)
+    }
+}
+
 impl Display for TryStatement {
     fn fmt(&self, _: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         unimplemented!()
@@ -269,6 +351,15 @@ impl Display for TryStatement {
 #[serde(rename_all = "camelCase")]
 pub struct RevertStatement {
     pub error_call: FunctionCall,
+}
+
+impl Node for RevertStatement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_revert_statement(self)? {
+            todo!()
+        }
+        visitor.end_visit_revert_statement(self)
+    }
 }
 
 impl Display for RevertStatement {
@@ -300,6 +391,15 @@ pub struct Return {
     pub id: NodeID,
 }
 
+impl Node for Return {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_return(self)? {
+            todo!()
+        }
+        visitor.end_visit_return(self)
+    }
+}
+
 impl Display for Return {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str("return")?;
@@ -324,4 +424,13 @@ pub struct InlineAssembly {
     pub operations: Option<String>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for InlineAssembly {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_inline_assembly(self)? {
+            todo!()
+        }
+        visitor.end_visit_inline_assembly(self)
+    }
 }
