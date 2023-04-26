@@ -161,8 +161,10 @@ pub struct ContractDefinition {
 
 impl Node for ContractDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_contract_definition(self)? && self.documentation.is_some() {
-            self.documentation.as_ref().unwrap().accept(visitor)?;
+        if visitor.visit_contract_definition(self)? {
+            if self.documentation.is_some() {
+                self.documentation.as_ref().unwrap().accept(visitor)?;
+            }
             list_accept(&self.base_contracts, visitor)?;
             list_accept(&self.nodes, visitor)?;
         }
