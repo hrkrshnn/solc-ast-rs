@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use eyre::Result;
+use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -8,6 +10,15 @@ pub struct Block {
     pub statements: Vec<Statement>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for Block {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_block(self)? {
+            list_accept(&self.statements, visitor)?;
+        }
+        visitor.end_visit_block(self)
+    }
 }
 
 impl Display for Block {

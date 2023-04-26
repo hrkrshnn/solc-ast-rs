@@ -19,7 +19,10 @@ pub struct EventDefinition {
 impl Node for EventDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_event_definition(self)? {
-            todo!()
+            if self.documentation.is_some() {
+                self.documentation.as_ref().unwrap().accept(visitor)?;
+            }
+            self.parameters.accept(visitor)?;
         }
         visitor.end_visit_event_definition(self)
     }

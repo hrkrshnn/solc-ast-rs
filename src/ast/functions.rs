@@ -118,7 +118,18 @@ pub struct FunctionDefinition {
 impl Node for FunctionDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_function_definition(self)? {
-            todo!()
+            if self.documentation.is_some() {
+                self.documentation.as_ref().unwrap().accept(visitor)?;
+            }
+            if self.overrides.is_some() {
+                self.overrides.as_ref().unwrap().accept(visitor)?;
+            }
+            self.parameters.accept(visitor)?;
+            self.return_parameters.accept(visitor)?;
+            list_accept(&self.modifiers, visitor)?;
+            if self.body.is_some() {
+                self.body.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_function_definition(self)
     }

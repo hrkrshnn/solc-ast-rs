@@ -16,7 +16,11 @@ pub struct UsingForDirective {
 impl Node for UsingForDirective {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_using_for_directive(self)? {
-            todo!()
+            // TODO there is a deviation. Missing FuntionsOrLibrary
+            self.library_name.accept(visitor)?;
+            if self.type_name.is_some() {
+                self.type_name.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_using_for_directive(self)
     }

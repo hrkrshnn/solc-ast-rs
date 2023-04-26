@@ -1,6 +1,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
+use eyre::Result;
+use crate::visitor::ast_visitor::*;
 
 #[derive(Clone, Debug, Deserialize, Eq, Serialize, PartialEq)]
 #[serde(untagged)]
@@ -23,6 +25,12 @@ pub enum Statement {
         src: Option<String>,
         id: Option<NodeID>,
     },
+}
+
+impl Node for Statement {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        todo!()
+    }
 }
 
 impl Statement {

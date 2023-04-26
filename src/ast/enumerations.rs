@@ -13,6 +13,13 @@ pub struct EnumValue {
     pub id: NodeID,
 }
 
+impl Node for EnumValue {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        visitor.visit_enum_value(self)?;
+        visitor.end_visit_enum_value(self)
+    }
+}
+
 impl Display for EnumValue {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.name.as_str())
@@ -33,7 +40,7 @@ pub struct EnumDefinition {
 impl Node for EnumDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_enum_definition(self)? {
-            todo!()
+            list_accept(&self.members, visitor)?;
         }
         visitor.end_visit_enum_definition(self)
     }

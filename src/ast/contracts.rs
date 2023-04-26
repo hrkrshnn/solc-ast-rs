@@ -104,7 +104,11 @@ pub struct InheritanceSpecifier {
 impl Node for InheritanceSpecifier {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_inheritance_specifier(self)? {
-            todo!();
+            self.base_name.accept(visitor)?;
+            if self.arguments.is_some() {
+                list_accept(self.arguments.as_ref().unwrap(), visitor)?;
+            }
+
         }
         visitor.end_visit_inheritance_specifier(self)
     }

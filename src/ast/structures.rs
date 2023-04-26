@@ -20,7 +20,7 @@ pub struct StructDefinition {
 impl Node for StructDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_struct_definition(self)? {
-            todo!()
+            list_accept(&self.members, visitor)?;
         }
         visitor.end_visit_struct_definition(self)
     }

@@ -24,6 +24,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_block(&mut self, node: &Block) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_block(&mut self, node: &Block) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_conditional(&mut self, node: &Conditional) -> Result<bool> {
         self.visit_node(node)
     }
@@ -62,6 +69,13 @@ pub trait ASTConstVisitor {
         self.visit_node(node)
     }
     fn end_visit_enum_definition(&mut self, node: &EnumDefinition) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
+    fn visit_enum_value(&mut self, node: &EnumValue) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_enum_value(&mut self, node: &EnumValue) -> Result<()> {
         self.end_visit_node(node)
     }
 
@@ -176,6 +190,14 @@ pub trait ASTConstVisitor {
     fn end_visit_modifier_definition(&mut self, node: &ModifierDefinition) -> Result<()> {
         self.end_visit_node(node)
     }
+
+    fn visit_modifier_invocation(&mut self, node: &ModifierInvocation) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_modifier_invocation(&mut self, node: &ModifierInvocation) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
 
     fn visit_override_specifier(&mut self, node: &OverrideSpecifier) -> Result<bool> {
         self.visit_node(node)

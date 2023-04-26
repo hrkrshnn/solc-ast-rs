@@ -22,7 +22,9 @@ pub struct ModifierDefinition {
 impl Node for ModifierDefinition {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_modifier_definition(self)? {
-            todo!()
+            // TODO: should we implement a string based visitor?
+            // self.name.accept(visitor)?;
+            self.parameters.accept(visitor)?;
         }
         visitor.end_visit_modifier_definition(self)
     }
@@ -69,6 +71,18 @@ pub struct ModifierInvocation {
     pub src: String,
     pub id: NodeID,
     pub kind: Option<ModifierInvocationKind>,
+}
+
+impl Node for ModifierInvocation {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_modifier_invocation(self)? {
+            self.modifier_name.accept(visitor)?;
+            if self.arguments.is_some() {
+                list_accept(self.arguments.as_ref().unwrap(), visitor)?;
+            }
+        }
+        visitor.end_visit_modifier_invocation(self)
+    }
 }
 
 impl Display for ModifierInvocation {
