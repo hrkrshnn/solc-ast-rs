@@ -1,4 +1,6 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -12,6 +14,15 @@ pub struct EventDefinition {
     pub parameters: ParameterList,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for EventDefinition {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_event_definition(self)? {
+            todo!()
+        }
+        visitor.end_visit_event_definition(self)
+    }
 }
 
 impl Display for EventDefinition {

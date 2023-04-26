@@ -63,7 +63,7 @@ pub struct OverrideSpecifier {
 impl Node for OverrideSpecifier {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_override_specifier(self)? {
-            todo!()
+            list_accept(&self.overrides, visitor)?;
         }
         visitor.end_visit_override_specifier(self)
     }
@@ -113,6 +113,15 @@ pub struct FunctionDefinition {
     pub visibility: Visibility,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for FunctionDefinition {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_function_definition(self)? {
+            todo!()
+        }
+        visitor.end_visit_function_definition(self)
+    }
 }
 
 impl FunctionDefinition {

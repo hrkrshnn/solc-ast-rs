@@ -1,4 +1,6 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -13,6 +15,15 @@ pub struct StructDefinition {
     pub canonical_name: Option<String>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for StructDefinition {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_struct_definition(self)? {
+            todo!()
+        }
+        visitor.end_visit_struct_definition(self)
+    }
 }
 
 impl Display for StructDefinition {

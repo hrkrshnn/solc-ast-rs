@@ -443,7 +443,8 @@ pub struct FunctionCall {
 impl Node for FunctionCall {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_function_call(self)? {
-            todo!();
+            self.expression.accept(visitor)?;
+            list_accept(&self.arguments, visitor)?;
         }
         visitor.end_visit_function_call(self)
     }
@@ -498,7 +499,10 @@ pub struct FunctionCallOptions {
 impl Node for FunctionCallOptions {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_function_call_options(self)? {
-            todo!();
+            self.expression.accept(visitor)?;
+            if self.arguments.is_some() {
+                list_accept(self.arguments.as_ref().unwrap(), visitor)?;
+            }
         }
         visitor.end_visit_function_call_options(self)
     }
@@ -580,7 +584,8 @@ pub struct IndexAccess {
 impl Node for IndexAccess {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_index_access(self)? {
-            todo!();
+            self.base_expression.accept(visitor)?;
+            self.index_expression.accept(visitor)?;
         }
         visitor.end_visit_index_access(self)
     }
@@ -619,7 +624,13 @@ pub struct IndexRangeAccess {
 impl Node for IndexRangeAccess {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_index_range_access(self)? {
-            todo!();
+            self.base_expression.accept(visitor)?;
+            if self.start_expression.is_some() {
+                self.start_expression.as_ref().unwrap().accept(visitor)?;
+            }
+            if self.end_expression.is_some() {
+                self.end_expression.as_ref().unwrap().accept(visitor)?;
+            }
         }
         visitor.end_visit_index_range_access(self)
     }
@@ -676,7 +687,7 @@ pub struct MemberAccess {
 impl Node for MemberAccess {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_member_access(self)? {
-            todo!();
+            self.expression.accept(visitor)?;
         }
         visitor.end_visit_member_access(self)
     }
@@ -710,9 +721,7 @@ pub struct ElementaryTypeNameExpression {
 
 impl Node for ElementaryTypeNameExpression {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_elementary_type_name_expression(self)? {
-            todo!();
-        }
+        visitor.visit_elementary_type_name_expression(self)?;
         visitor.end_visit_elementary_type_name_expression(self)
     }
 }
@@ -741,7 +750,11 @@ pub struct TupleExpression {
 impl Node for TupleExpression {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_tuple_expression(self)? {
-            todo!();
+            for elem in &self.components {
+                if elem.is_some() {
+                    elem.as_ref().unwrap().accept(visitor)?;
+                }
+            }
         }
         visitor.end_visit_tuple_expression(self)
     }
@@ -798,7 +811,7 @@ pub struct NewExpression {
 impl Node for NewExpression {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
         if visitor.visit_new_expression(self)? {
-            todo!();
+            self.type_name.accept(visitor)?;
         }
         visitor.end_visit_new_expression(self)
     }

@@ -1,4 +1,6 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -11,6 +13,15 @@ pub struct ErrorDefinition {
     pub parameters: ParameterList,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for ErrorDefinition {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_error_definition(self)? {
+            todo!()
+        }
+        visitor.end_visit_error_definition(self)
+    }
 }
 
 impl Display for ErrorDefinition {

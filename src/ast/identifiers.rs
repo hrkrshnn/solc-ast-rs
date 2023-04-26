@@ -18,9 +18,7 @@ pub struct Identifier {
 
 impl Node for Identifier {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_identifier(self)? {
-            todo!();
-        }
+        visitor.visit_identifier(self)?;
         visitor.end_visit_identifier(self)
     }
 }

@@ -102,10 +102,8 @@ pub struct UserDefinedTypeName {
 
 impl Node for UserDefinedTypeName {
     fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
-        if visitor.visit_user_defined_type_name(self)? {
-            if self.path_node.is_some() {
-                self.path_node.as_ref().unwrap().accept(visitor)?;
-            }
+        if visitor.visit_user_defined_type_name(self)? && self.path_node.is_some() {
+            self.path_node.as_ref().unwrap().accept(visitor)?;
         }
         visitor.end_visit_user_defined_type_name(self)
     }

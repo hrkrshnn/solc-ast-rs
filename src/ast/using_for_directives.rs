@@ -1,4 +1,6 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -9,6 +11,15 @@ pub struct UsingForDirective {
     pub type_name: Option<TypeName>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for UsingForDirective {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_using_for_directive(self)? {
+            todo!()
+        }
+        visitor.end_visit_using_for_directive(self)
+    }
 }
 
 impl Display for UsingForDirective {

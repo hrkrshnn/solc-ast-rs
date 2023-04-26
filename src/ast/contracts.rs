@@ -1,4 +1,6 @@
 use super::*;
+use crate::visitor::ast_visitor::*;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
@@ -28,6 +30,40 @@ pub enum ContractDefinitionNode {
     ModifierDefinition(ModifierDefinition),
     ErrorDefinition(ErrorDefinition),
     UserDefinedValueTypeDefinition(UserDefinedValueTypeDefinition),
+}
+
+impl Node for ContractDefinitionNode {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        match self {
+            ContractDefinitionNode::UsingForDirective(using_for_directive) => {
+                using_for_directive.accept(visitor)
+            }
+            ContractDefinitionNode::StructDefinition(struct_definition) => {
+                struct_definition.accept(visitor)
+            }
+            ContractDefinitionNode::EnumDefinition(enum_definition) => {
+                enum_definition.accept(visitor)
+            }
+            ContractDefinitionNode::VariableDeclaration(variable_declaration) => {
+                variable_declaration.accept(visitor)
+            }
+            ContractDefinitionNode::EventDefinition(event_definition) => {
+                event_definition.accept(visitor)
+            }
+            ContractDefinitionNode::FunctionDefinition(function_definition) => {
+                function_definition.accept(visitor)
+            }
+            ContractDefinitionNode::ModifierDefinition(modifier_definition) => {
+                modifier_definition.accept(visitor)
+            }
+            ContractDefinitionNode::ErrorDefinition(error_definition) => {
+                error_definition.accept(visitor)
+            }
+            ContractDefinitionNode::UserDefinedValueTypeDefinition(
+                user_defined_value_type_definition,
+            ) => user_defined_value_type_definition.accept(visitor),
+        }
+    }
 }
 
 impl Display for ContractDefinitionNode {
@@ -63,6 +99,15 @@ pub struct InheritanceSpecifier {
     pub arguments: Option<Vec<Expression>>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for InheritanceSpecifier {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_inheritance_specifier(self)? {
+            todo!();
+        }
+        visitor.end_visit_inheritance_specifier(self)
+    }
 }
 
 impl Display for InheritanceSpecifier {
@@ -109,6 +154,19 @@ pub struct ContractDefinition {
     pub linearized_base_contracts: Option<Vec<NodeID>>,
     pub src: String,
     pub id: NodeID,
+}
+
+impl Node for ContractDefinition {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_contract_definition(self)? {
+            if self.documentation.is_some() {
+                self.documentation.as_ref().unwrap().accept(visitor)?;
+                list_accept(&self.base_contracts, visitor)?;
+                list_accept(&self.nodes, visitor)?;
+            }
+        }
+        visitor.end_visit_contract_definition(self)
+    }
 }
 
 impl ContractDefinition {
