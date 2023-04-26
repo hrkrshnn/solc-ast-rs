@@ -275,6 +275,13 @@ pub trait ASTConstVisitor {
         self.end_visit_node(node)
     }
 
+    fn visit_source_unit(&mut self, node: &SourceUnit) -> Result<bool> {
+        self.visit_node(node)
+    }
+    fn end_visit_source_unit(&mut self, node: &SourceUnit) -> Result<()> {
+        self.end_visit_node(node)
+    }
+
     fn visit_struct_definition(&mut self, node: &StructDefinition) -> Result<bool> {
         self.visit_node(node)
     }

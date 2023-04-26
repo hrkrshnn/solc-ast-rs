@@ -54,6 +54,15 @@ pub struct SourceUnit {
     pub source: Option<String>,
 }
 
+impl Node for SourceUnit {
+    fn accept(&self, visitor: &mut impl ASTConstVisitor) -> Result<()> {
+        if visitor.visit_source_unit(self)? {
+            list_accept(&self.nodes, visitor)?;
+        }
+        visitor.end_visit_source_unit(self)
+    }
+}
+
 impl SourceUnit {
     pub fn source_line(&self, src: &str) -> Result<usize> {
         let source = match self.source.as_ref() {
