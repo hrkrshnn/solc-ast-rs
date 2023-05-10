@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-pub type NodeID = u64;
+pub type NodeID = i64;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, PartialOrd, Eq, Ord, Hash)]
 pub enum NodeType {
